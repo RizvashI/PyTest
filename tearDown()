@@ -1,0 +1,33 @@
+Существует два способа написания tearDown():
+1. Использовать pytest.yield_fixture. Об этом в стандартной документации к py.test:
+Fixture functions using “yield” / context manager integration  https://docs.pytest.org/en/latest/yieldfixture.html
+
+2. Использовать Fixture.Request, вернее его методом addfinalizer().
+https://docs.pytest.org/en/latest/example/simple.html?highlight=addfinalizer#making-test-result-information-available-in-fixtures
+
+Способ №1:
+
+@pytest.yield_fixture
+def application():
+    _app = create_app(configName='testing')
+    _app_ctx = _app.app_context()
+    _app_ctx.push()
+    db.create_all()
+    yield _app
+    db.session.remove()
+    db.drop_all()
+    _app_ctx.pop()
+    
+ Способ №2:
+ @pytest.fixture
+ def application():
+    _app = create_app(configName='testing')
+    _app_ctx = _app.app_context()
+    _app_ctx.push()
+    db.create_all()
+    def _finalize()
+        db.session.remove()
+        db.drop_all()
+        _app_ctx.pop()
+    request.addfinalizer(_finalize)
+    return _app
