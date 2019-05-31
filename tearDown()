@@ -1,3 +1,6 @@
+=============
+https://wm-help.net/lib/b/book/1471253964/35
+============
 Существует два способа написания tearDown():
 1. Использовать pytest.yield_fixture. Об этом в стандартной документации к py.test:
 Fixture functions using “yield” / context manager integration  https://docs.pytest.org/en/latest/yieldfixture.html
